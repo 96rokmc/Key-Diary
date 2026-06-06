@@ -19,6 +19,7 @@ export default [
         localStorage: 'readonly',
         indexedDB: 'readonly',
         IDBKeyRange: 'readonly',
+        confirm: 'readonly',
         AudioContext: 'readonly',
         webkitAudioContext: 'readonly',
         MediaRecorder: 'readonly',

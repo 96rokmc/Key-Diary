@@ -1,0 +1,432 @@
+.repertoire-list {
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ── 헤더 ── */
+.rep-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rep-header__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
+}
+
+.rep-add-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-full);
+  background: var(--color-indigo);
+  color: var(--color-ivory);
+  font-size: var(--text-xl);
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ease-default), transform var(--ease-spring);
+}
+
+.rep-add-btn:hover  { background: var(--color-indigo-2); }
+.rep-add-btn:active { transform: scale(0.93); }
+.rep-add-btn:focus-visible {
+  outline: 2px solid var(--color-indigo);
+  outline-offset: 3px;
+}
+
+/* ── 빈 상태 ── */
+.rep-empty {
+  text-align: center;
+  padding: var(--space-12) var(--space-8);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+  background: var(--color-cream);
+  border-radius: var(--radius-lg);
+}
+
+/* ── 추가 폼 ── */
+.rep-form {
+  background: var(--color-ivory);
+  border: 1px solid var(--color-indigo);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-md);
+}
+
+.rep-form__title {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  color: var(--color-indigo);
+  letter-spacing: var(--tracking-wide);
+}
+
+.rep-form__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.rep-form__row--half {
+  flex-direction: row;
+  gap: var(--space-4);
+}
+
+.rep-form__row--half > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.rep-form__label {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  letter-spacing: var(--tracking-wide);
+}
+
+.rep-form__input {
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--ease-default);
+}
+
+.rep-form__input:focus {
+  outline: none;
+  border-color: var(--color-indigo-2);
+}
+
+.rep-form__actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+
+.rep-form__cancel {
+  padding: var(--space-2) var(--space-5);
+  background: var(--color-cream);
+  color: var(--color-muted);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-serif);
+  cursor: pointer;
+  transition: background var(--ease-default);
+}
+
+.rep-form__cancel:hover { background: var(--color-border); color: var(--color-ink); }
+
+.rep-form__submit {
+  padding: var(--space-2) var(--space-5);
+  background: var(--color-indigo);
+  color: var(--color-ivory);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-serif);
+  cursor: pointer;
+  transition: background var(--ease-default);
+}
+
+.rep-form__submit:hover { background: var(--color-indigo-2); }
+
+.rep-form__cancel:focus-visible,
+.rep-form__submit:focus-visible {
+  outline: 2px solid var(--color-indigo);
+  outline-offset: 2px;
+}
+
+/* ── 카드 ── */
+.rep-card {
+  background: var(--color-ivory);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--ease-default);
+}
+
+.rep-card--expanded {
+  border-color: var(--color-indigo);
+  box-shadow: var(--shadow-md);
+}
+
+.rep-card__header {
+  padding: var(--space-4) var(--space-5);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.rep-card__header:focus-visible {
+  outline: 2px solid var(--color-indigo);
+  outline-offset: -2px;
+}
+
+.rep-card__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.rep-card__title {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  color: var(--color-ink);
+  letter-spacing: var(--tracking-tight);
+}
+
+.rep-card__composer {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ── 상태 배지 ── */
+.rep-status {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.rep-status--goal       { background: var(--color-cream);   color: var(--color-muted); }
+.rep-status--in_progress{ background: var(--color-indigo);  color: var(--color-ivory); }
+.rep-status--completed  { background: var(--color-sage);    color: var(--color-ivory); }
+
+/* ── 진도 바 ── */
+.rep-card__progress-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rep-progress {
+  flex: 1;
+  height: 6px;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.rep-progress__bar {
+  height: 100%;
+  background: var(--color-sage);
+  border-radius: var(--radius-full);
+  transition: width var(--ease-slow);
+}
+
+.rep-progress__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+/* ── BPM + 버전 행 ── */
+.rep-card__bpm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rep-bpm {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+}
+
+.rep-bpm__arrow {
+  color: var(--color-muted);
+}
+
+.rep-versions {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.rep-version {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ease-default), color var(--ease-default);
+}
+
+.rep-version--unlocked {
+  background: var(--color-gold);
+  color: var(--color-ivory);
+}
+
+/* ── 편집 영역 ── */
+.rep-card__body {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-paper);
+}
+
+.rep-edit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.rep-edit__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rep-edit__label {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  letter-spacing: var(--tracking-wide);
+  min-width: 5rem;
+}
+
+.rep-edit__input {
+  width: 5rem;
+  padding: var(--space-1) var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  color: var(--color-ink);
+  background: var(--color-ivory);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: border-color var(--ease-default);
+}
+
+.rep-edit__input:focus {
+  outline: none;
+  border-color: var(--color-indigo-2);
+}
+
+.rep-edit__hint {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.rep-edit__row--status {
+  flex-wrap: wrap;
+}
+
+/* ── 상태 선택 버튼 ── */
+.rep-status-group {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.rep-status-btn {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  font-family: var(--font-serif);
+  letter-spacing: var(--tracking-wide);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-cream);
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: background var(--ease-default), color var(--ease-default),
+    border-color var(--ease-default);
+}
+
+.rep-status-btn:hover {
+  background: var(--color-indigo);
+  color: var(--color-ivory);
+  border-color: var(--color-indigo);
+}
+
+.rep-status-btn--active {
+  background: var(--color-indigo);
+  color: var(--color-ivory);
+  border-color: var(--color-indigo);
+}
+
+.rep-status-btn:focus-visible {
+  outline: 2px solid var(--color-indigo);
+  outline-offset: 2px;
+}
+
+/* ── BPM 진행 바 (편집 내) ── */
+.rep-edit__bpm-bar {
+  height: 4px;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.rep-edit__bpm-fill {
+  height: 100%;
+  background: var(--color-indigo-2);
+  border-radius: var(--radius-full);
+  transition: width var(--ease-slow);
+}
+
+/* ── 저장·삭제 버튼 ── */
+.rep-edit__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-1);
+}
+
+.rep-edit__delete {
+  font-size: var(--text-sm);
+  color: var(--color-rust);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-1) 0;
+  letter-spacing: var(--tracking-wide);
+}
+
+.rep-edit__delete:hover { text-decoration: underline; }
+
+.rep-edit__save {
+  padding: var(--space-2) var(--space-6);
+  background: var(--color-indigo);
+  color: var(--color-ivory);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background var(--ease-default), transform var(--ease-spring);
+}
+
+.rep-edit__save:hover  { background: var(--color-indigo-2); }
+.rep-edit__save:active { transform: scale(0.97); }
+
+.rep-edit__delete:focus-visible,
+.rep-edit__save:focus-visible {
+  outline: 2px solid var(--color-indigo);
+  outline-offset: 2px;
+}

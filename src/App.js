@@ -4,6 +4,7 @@ import { PostureCheck } from './components/posture/PostureCheck.js';
 import { PracticeTimer } from './components/timer/PracticeTimer.js';
 import { Metronome } from './components/metronome/Metronome.js';
 import { StreakCalendar } from './components/calendar/StreakCalendar.js';
+import { RepertoireList } from './components/repertoire/RepertoireList.js';
 import { AirPianoQuest } from './components/quest/AirPianoQuest.js';
 import {
   NotificationPrompt,
@@ -14,7 +15,12 @@ import { recordSession } from './stores/streak.store.js';
 import { ToastContainer } from './components/toast/Toast.js';
 import { checkAndFireReminder } from './services/notification.service.js';
 
-const TABS = /** @type {const} */ ({ PRACTICE: 'practice', CALENDAR: 'calendar' });
+const TABS = /** @type {const} */ ({
+  PRACTICE:    'practice',
+  REPERTOIRE:  'repertoire',
+  CALENDAR:    'calendar',
+});
+
 const PRACTICE_VIEWS = /** @type {const} */ ({
   POSTURE: 'posture',
   TIMER:   'timer',
@@ -22,8 +28,8 @@ const PRACTICE_VIEWS = /** @type {const} */ ({
 });
 
 export function App() {
-  let activeTab    = TABS.PRACTICE;
-  let practiceView = PRACTICE_VIEWS.POSTURE;
+  let activeTab        = TABS.PRACTICE;
+  let practiceView     = PRACTICE_VIEWS.POSTURE;
   let pendingSessionId = null;
   let pendingDuration  = 0;
 
@@ -45,6 +51,15 @@ export function App() {
           <polygon points="10,8.5 10,15.5 16,12" fill="currentColor"/>
         </svg>
         <span>연습</span>
+      </button>
+      <button class="kd-nav-btn" data-tab="repertoire"
+              aria-label="레퍼토리" aria-selected="false">
+        <svg class="kd-nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <span>레퍼토리</span>
       </button>
       <button class="kd-nav-btn" data-tab="calendar"
               aria-label="캘린더" aria-selected="false">
@@ -90,7 +105,7 @@ export function App() {
   }
 
   function goToCalendar() {
-    practiceView    = PRACTICE_VIEWS.POSTURE;
+    practiceView     = PRACTICE_VIEWS.POSTURE;
     pendingSessionId = null;
     pendingDuration  = 0;
     switchTab(TABS.CALENDAR);
@@ -104,10 +119,19 @@ export function App() {
       once: true,
     });
 
+    // ── 캘린더 탭 ──
     if (activeTab === TABS.CALENDAR) {
       const cal = StreakCalendar();
       cal.setAttribute('data-destroy', '');
       main.appendChild(cal);
+      return;
+    }
+
+    // ── 레퍼토리 탭 ──
+    if (activeTab === TABS.REPERTOIRE) {
+      const rep = RepertoireList();
+      rep.setAttribute('data-destroy', '');
+      main.appendChild(rep);
       return;
     }
 
@@ -146,10 +170,9 @@ export function App() {
 
       const timer = PracticeTimer({
         onComplete: async (duration) => {
-          pendingDuration = duration ?? 0;
-          // 스트릭 업데이트 + IndexedDB 저장 — session ID 반환
+          pendingDuration  = duration ?? 0;
           pendingSessionId = await recordSession({ duration: pendingDuration });
-          practiceView = PRACTICE_VIEWS.NOTES;
+          practiceView     = PRACTICE_VIEWS.NOTES;
           renderMain();
         },
       });
