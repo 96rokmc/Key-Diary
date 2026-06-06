@@ -46,21 +46,24 @@ export function remove(key) {
 
 // ── IndexedDB ─────────────────────────────────────────────────────────────────
 
-const DB_NAME = 'keonban-ilgi';
-const DB_VERSION = 1;
+const DB_NAME    = 'keonban-ilgi';
+const DB_VERSION = 2;
 
 let _dbPromise = null;
 
 function getDB() {
   if (!_dbPromise) {
     _dbPromise = openDB(DB_NAME, DB_VERSION, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains('sessions')) {
+      upgrade(db, oldVersion) {
+        if (oldVersion < 1) {
           const store = db.createObjectStore('sessions', { keyPath: 'id' });
           store.createIndex('by_date', 'date');
-        }
-        if (!db.objectStoreNames.contains('repertoire')) {
           db.createObjectStore('repertoire', { keyPath: 'id' });
+        }
+        if (oldVersion < 2) {
+          // Blob 저장 지원 — IndexedDB는 구조화 복제로 Blob을 네이티브 지원
+          const recStore = db.createObjectStore('recordings', { keyPath: 'id' });
+          recStore.createIndex('by_date', 'date');
         }
       },
     });
@@ -183,6 +186,54 @@ export async function deleteRepertoire(id) {
     return { success: true };
   } catch (error) {
     console.error('[db] 레퍼토리 삭제 실패:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+// ── 녹음 아카이브 ──────────────────────────────────────────────────────────────
+
+/**
+ * 녹음 저장 (Blob 포함).
+ * @param {{ id: string, date: string, createdAt: number, duration: number,
+ *           title: string, mimeType: string, size: number, blob: Blob }} record
+ */
+export async function addRecording(record) {
+  try {
+    const db = await getDB();
+    await db.put('recordings', record);
+    return { success: true, id: record.id };
+  } catch (error) {
+    console.error('[db] 녹음 저장 실패:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * 전체 녹음 목록 조회 (최신순).
+ * @returns {Promise<object[]>}
+ */
+export async function getAllRecordings() {
+  try {
+    const db  = await getDB();
+    const all = await db.getAll('recordings');
+    return all.sort((a, b) => b.createdAt - a.createdAt);
+  } catch (error) {
+    console.error('[db] 녹음 조회 실패:', error);
+    return [];
+  }
+}
+
+/**
+ * 녹음 삭제.
+ * @param {string} id
+ */
+export async function deleteRecording(id) {
+  try {
+    const db = await getDB();
+    await db.delete('recordings', id);
+    return { success: true };
+  } catch (error) {
+    console.error('[db] 녹음 삭제 실패:', error);
     return { success: false, error: error.message };
   }
 }

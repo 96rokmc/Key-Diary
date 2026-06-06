@@ -42,4 +42,17 @@ export const UI_TEXT = {
   AI_COACH_RETRY: '다시 시도',
   AI_COACH_ERROR_PREFIX: '오류: ',
   AI_COACH_ERROR_NO_KEY: 'API 키가 설정되지 않았습니다.',
+
+  RECORDER_START: '녹음',
+  RECORDER_STOP: '중지',
+  RECORDER_SAVED_TITLE: '녹음 저장됨',
+  RECORDER_SAVED_MSG: (secs) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m > 0 ? m + '분 ' : ''}${s}초 녹음이 저장됐습니다.`;
+  },
+
+  ARCHIVE_TITLE: '녹음 아카이브',
+  ARCHIVE_EMPTY: '아직 저장된 녹음이 없습니다',
+  ARCHIVE_DELETE_CONFIRM: '이 녹음을 삭제하시겠습니까?',
 };

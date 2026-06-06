@@ -9,6 +9,8 @@ import { SightReading } from './components/sight-reading/SightReading.js';
 import { PitchPuzzle } from './components/sight-reading/PitchPuzzle.js';
 import { GrowthCharts } from './components/charts/GrowthCharts.js';
 import { AiCoach } from './components/ai-coach/AiCoach.js';
+import { Recorder } from './components/recorder/Recorder.js';
+import { RecordingArchive } from './components/recorder/RecordingArchive.js';
 import { AirPianoQuest } from './components/quest/AirPianoQuest.js';
 import {
   NotificationPrompt,
@@ -153,6 +155,13 @@ export function App() {
       charts.setAttribute('data-destroy', '');
       wrap.appendChild(charts);
 
+      const divider2 = document.createElement('hr');
+      divider2.className = 'kd-calendar-divider';
+      wrap.appendChild(divider2);
+
+      const archive = RecordingArchive();
+      wrap.appendChild(archive);
+
       main.appendChild(wrap);
       return;
     }
@@ -227,8 +236,11 @@ export function App() {
       const metro = Metronome();
       metro.setAttribute('data-destroy', '');
 
+      const recorder = Recorder();
+
       wrapper.appendChild(timer);
       wrapper.appendChild(metro);
+      if (recorder) wrapper.appendChild(recorder);
       main.appendChild(wrapper);
       return;
     }
