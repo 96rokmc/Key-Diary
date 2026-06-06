@@ -1,0 +1,51 @@
+.ot-banner-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.ot-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+}
+
+/* 경고 (60~89분) */
+.ot-banner--warn {
+  background: rgba(184, 134, 42, 0.08);
+  border-color: rgba(184, 134, 42, 0.3);
+}
+
+/* 강경고 (90분+) */
+.ot-banner--danger {
+  background: rgba(139, 58, 30, 0.08);
+  border-color: rgba(139, 58, 30, 0.3);
+}
+
+/* 정보 (스트릭 리스크) */
+.ot-banner--info {
+  background: rgba(45, 38, 128, 0.06);
+  border-color: rgba(45, 38, 128, 0.2);
+}
+
+.ot-icon {
+  font-size: var(--text-base);
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+
+.ot-text {
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-ink);
+}
+
+.ot-banner--warn   .ot-text { color: #7a5a12; }
+.ot-banner--danger .ot-text { color: var(--color-rust); }
+.ot-banner--info   .ot-text { color: var(--color-indigo); }

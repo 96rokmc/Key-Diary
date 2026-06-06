@@ -55,4 +55,10 @@ export const UI_TEXT = {
   ARCHIVE_TITLE: '녹음 아카이브',
   ARCHIVE_EMPTY: '아직 저장된 녹음이 없습니다',
   ARCHIVE_DELETE_CONFIRM: '이 녹음을 삭제하시겠습니까?',
+
+  OVERTRAINING_BREAK_TITLE: '손목 스트레칭 시간',
+  OVERTRAINING_BREAK_MSG: '25분 연속 연습했습니다. 잠깐 손목·어깨를 스트레칭하고 물 한 잔 마셔보세요.',
+  OVERTRAINING_WARN: (mins) => `오늘 이미 ${mins}분 연습했습니다. 하루 90분을 넘지 않도록 주의하세요.`,
+  OVERTRAINING_LIMIT: (mins) => `오늘 누적 ${mins}분 — 과연습 주의! 손가락·손목 부상 예방을 위해 오늘은 가볍게 마무리하세요.`,
+  OVERTRAINING_STREAK: (days) => `${days}일 연속 연습 중입니다. 일주일에 하루 완전 휴식이 근육 회복과 실력 향상에 효과적입니다.`,
 };

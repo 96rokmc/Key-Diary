@@ -11,6 +11,9 @@ import { GrowthCharts } from './components/charts/GrowthCharts.js';
 import { AiCoach } from './components/ai-coach/AiCoach.js';
 import { Recorder } from './components/recorder/Recorder.js';
 import { RecordingArchive } from './components/recorder/RecordingArchive.js';
+import { OvertrainingBanner } from './components/overtraining/OvertrainingBanner.js';
+import { showToast } from './services/toast.service.js';
+import { BREAK_AFTER_MS } from './services/overtraining.service.js';
 import { AirPianoQuest } from './components/quest/AirPianoQuest.js';
 import {
   NotificationPrompt,
@@ -223,6 +226,22 @@ export function App() {
     if (practiceView === PRACTICE_VIEWS.TIMER) {
       const wrapper = document.createElement('div');
       wrapper.className = 'kd-practice-wrapper';
+      wrapper.setAttribute('data-destroy', '');
+
+      // 25분 연속 연습 후 손목 스트레칭 알림
+      const breakTimer = setTimeout(() => {
+        showToast({
+          icon: '🙌',
+          title: UI_TEXT.OVERTRAINING_BREAK_TITLE,
+          message: UI_TEXT.OVERTRAINING_BREAK_MSG,
+          duration: 8000,
+        });
+      }, BREAK_AFTER_MS);
+
+      wrapper._destroy = () => clearTimeout(breakTimer);
+
+      const otBanner = OvertrainingBanner();
+      wrapper.appendChild(otBanner);
 
       const timer = PracticeTimer({
         onComplete: async (duration) => {
