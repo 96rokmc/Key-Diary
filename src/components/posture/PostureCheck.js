@@ -1,6 +1,7 @@
 import './posture-check.css';
 import { POSTURE_ITEMS } from '../../constants/posture.js';
 import { UI_TEXT } from '../../constants/ui-text.js';
+import { AiPostureGuide } from './AiPostureGuide.js';
 
 const CHECKMARK_SVG = `
   <svg class="posture-item__checkmark" viewBox="0 0 14 14" fill="none"
@@ -96,6 +97,8 @@ export function PostureCheck({ onComplete }) {
   startBtn.addEventListener('click', () => {
     if (checked.size === POSTURE_ITEMS.length) onComplete();
   });
+
+  el.appendChild(AiPostureGuide());
 
   function toggle(id, li) {
     if (checked.has(id)) {

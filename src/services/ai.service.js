@@ -45,6 +45,57 @@ export async function generatePracticeReview(session) {
   }
 }
 
+/**
+ * 연습 시작 전 AI 자세 가이드 생성.
+ * @param {{ streak: number, totalDays: number }} stats
+ * @returns {Promise<{ success: boolean, guide?: string, error?: string }>}
+ */
+export async function generatePostureGuide(stats) {
+  const apiKey = getApiKey();
+  if (!apiKey) return { success: false, error: 'no_key' };
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: AI_MODEL,
+        max_tokens: 500,
+        messages: [{ role: 'user', content: buildPosturePrompt(stats) }],
+      }),
+    });
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      return { success: false, error: errData.error?.message ?? `오류 ${res.status}` };
+    }
+
+    const data = await res.json();
+    return { success: true, guide: data.content[0].text };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+}
+
+function buildPosturePrompt({ streak, totalDays }) {
+  return `당신은 피아노 연습 코치입니다. 50대 성인 피아노 독학자(${streak}일 연속 연습 중, 누적 ${totalDays}일 연습, 목표: 베토벤 비창 2악장)가 지금 막 연습을 시작하려 합니다. 오늘의 자세 포인트를 아주 간결하게 알려주세요. 한국어로 답변하세요.
+
+## 답변 형식 (반드시 이 형식으로, 각 항목은 1~2문장 이내)
+**오늘의 포인트**
+(오늘 특히 신경 써야 할 자세 포인트 1가지)
+
+**주의**
+- (한 가지 구체적 주의사항)
+
+**시작 전 스트레칭**
+(10초 이내 간단한 스트레칭 1가지)`;
+}
+
 function buildPrompt(session) {
   const mins   = Math.round((session.duration ?? 0) / 60);
   const note   = session.note ?? {};
