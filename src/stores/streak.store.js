@@ -1,4 +1,4 @@
-﻿import { load, save, saveNow } from '../services/storage.service.js';
+﻿import { load, save, saveNow, addSession } from '../services/storage.service.js';
 import { showToast } from '../services/toast.service.js';
 import { BADGES } from '../constants/badges.js';
 import { today, daysBefore } from '../utils/date.utils.js';
@@ -77,6 +77,19 @@ export function recordSession({ duration = 0 } = {}) {
   saveNow(STREAK_KEY, streakData);
   saveNow(DATES_KEY, [...practicedDates]);
   notify();
+
+  // IndexedDB에 전체 세션 기록 저장 (비동기, UI 흐름을 막지 않음)
+  const endedAt = Date.now();
+  addSession({
+    date,
+    startedAt: endedAt - duration * 1000,
+    endedAt,
+    duration,
+    phases: [],
+    repertoire: null,
+    note: null,
+    questCompleted: false,
+  }).catch((err) => console.error('[streak] IndexedDB 세션 저장 실패:', err));
 
   // 배지 알림은 저장 완료 후 표시 (약간 지연해 캘린더 전환 애니메이션과 겹치지 않게)
   newBadges.forEach((badge, i) => {

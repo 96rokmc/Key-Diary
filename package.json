@@ -26,5 +26,8 @@
     "pwa"
   ],
   "author": "96rokmc@gmail.com",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "idb": "^8.0.3"
+  }
 }

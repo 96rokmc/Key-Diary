@@ -18,6 +18,7 @@ export default [
         navigator: 'readonly',
         localStorage: 'readonly',
         indexedDB: 'readonly',
+        IDBKeyRange: 'readonly',
         AudioContext: 'readonly',
         webkitAudioContext: 'readonly',
         MediaRecorder: 'readonly',
