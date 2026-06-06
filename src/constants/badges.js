@@ -1,0 +1,51 @@
+export const BADGES = [
+  {
+    id: 'streak_3',
+    label: '3일 연속',
+    description: '3일 연속 연습 완료',
+    icon: '🔥',
+    condition: (streak) => streak.currentStreak >= 3,
+  },
+  {
+    id: 'streak_7',
+    label: '일주일 연속',
+    description: '7일 연속 연습 완료',
+    icon: '⭐',
+    condition: (streak) => streak.currentStreak >= 7,
+  },
+  {
+    id: 'streak_30',
+    label: '한 달 연속',
+    description: '30일 연속 연습 완료',
+    icon: '🏅',
+    condition: (streak) => streak.currentStreak >= 30,
+  },
+  {
+    id: 'streak_100',
+    label: '100일의 기적',
+    description: '100일 연속 연습 완료',
+    icon: '🏆',
+    condition: (streak) => streak.currentStreak >= 100,
+  },
+  {
+    id: 'hours_10',
+    label: '10시간 돌파',
+    description: '누적 연습 시간 10시간 달성',
+    icon: '🎹',
+    condition: (streak) => streak.totalDuration >= 36000,
+  },
+  {
+    id: 'hours_50',
+    label: '50시간의 여정',
+    description: '누적 연습 시간 50시간 달성',
+    icon: '🎼',
+    condition: (streak) => streak.totalDuration >= 180000,
+  },
+  {
+    id: 'first_session',
+    label: '첫 발걸음',
+    description: '첫 번째 연습 세션 완료',
+    icon: '🌱',
+    condition: (streak) => streak.totalDays >= 1,
+  },
+];

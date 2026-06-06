@@ -1,0 +1,30 @@
+{
+  "name": "keonban-ilgi",
+  "version": "0.1.0",
+  "description": "건반일기 — 50대 성인 피아노 독학자의 연습 습관 일지",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "format": "prettier --write src"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "prettier": "^3.8.3",
+    "vite": "^5.4.21",
+    "vite-plugin-pwa": "^0.21.2",
+    "vitest": "^1.6.0"
+  },
+  "keywords": [
+    "piano",
+    "practice",
+    "diary",
+    "pwa"
+  ],
+  "author": "96rokmc@gmail.com",
+  "license": "MIT"
+}

@@ -1,0 +1,32 @@
+export const DEFAULT_REPERTOIRE = [
+  {
+    id: 'beethoven_pathetique_2',
+    title: '비창 2악장',
+    composer: '베토벤',
+    status: 'goal',
+    difficulty: 4,
+    targetBpm: 88,
+    currentBpm: 60,
+    totalMeasures: 73,
+    learnedMeasures: 0,
+    versions: [
+      { level: 1, label: '쉬운 버전', unlocked: true },
+      { level: 2, label: '중간 버전', unlocked: false },
+      { level: 3, label: '원곡', unlocked: false },
+    ],
+    notes: [],
+  },
+  {
+    id: 'hanon_1',
+    title: '하농 1번',
+    composer: '하농',
+    status: 'in_progress',
+    difficulty: 1,
+    targetBpm: 120,
+    currentBpm: 80,
+    totalMeasures: 4,
+    learnedMeasures: 4,
+    versions: [{ level: 1, label: '기본', unlocked: true }],
+    notes: [],
+  },
+];
