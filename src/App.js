@@ -9,16 +9,23 @@ import {
   NotificationPrompt,
   NotificationSettings,
 } from './components/quest/NotificationPrompt.js';
+import { PracticeNotes } from './components/notes/PracticeNotes.js';
 import { recordSession } from './stores/streak.store.js';
 import { ToastContainer } from './components/toast/Toast.js';
 import { checkAndFireReminder } from './services/notification.service.js';
 
 const TABS = /** @type {const} */ ({ PRACTICE: 'practice', CALENDAR: 'calendar' });
-const PRACTICE_VIEWS = /** @type {const} */ ({ POSTURE: 'posture', TIMER: 'timer' });
+const PRACTICE_VIEWS = /** @type {const} */ ({
+  POSTURE: 'posture',
+  TIMER:   'timer',
+  NOTES:   'notes',
+});
 
 export function App() {
-  let activeTab = TABS.PRACTICE;
+  let activeTab    = TABS.PRACTICE;
   let practiceView = PRACTICE_VIEWS.POSTURE;
+  let pendingSessionId = null;
+  let pendingDuration  = 0;
 
   // ── DOM 뼈대 ─────────────────────────────────────────
   const el = document.createElement('div');
@@ -52,7 +59,7 @@ export function App() {
     </nav>
   `;
 
-  const main = el.querySelector('#kd-main-content');
+  const main    = el.querySelector('#kd-main-content');
   const navBtns = el.querySelectorAll('.kd-nav-btn');
 
   navBtns.forEach((btn) => {
@@ -82,17 +89,20 @@ export function App() {
     if (node) parent.appendChild(node);
   }
 
+  function goToCalendar() {
+    practiceView    = PRACTICE_VIEWS.POSTURE;
+    pendingSessionId = null;
+    pendingDuration  = 0;
+    switchTab(TABS.CALENDAR);
+  }
+
   function renderMain() {
     destroyCurrent();
     main.innerHTML = '';
     main.classList.add('animate-fade-in');
-    main.addEventListener(
-      'animationend',
-      () => main.classList.remove('animate-fade-in'),
-      {
-        once: true,
-      },
-    );
+    main.addEventListener('animationend', () => main.classList.remove('animate-fade-in'), {
+      once: true,
+    });
 
     if (activeTab === TABS.CALENDAR) {
       const cal = StreakCalendar();
@@ -106,19 +116,16 @@ export function App() {
       const wrapper = document.createElement('div');
       wrapper.className = 'kd-posture-wrapper';
 
-      // 1. 알림 설정 배너 (미설정 시) 또는 알림 시각 설정
-      const notifPrompt = NotificationPrompt();
+      const notifPrompt   = NotificationPrompt();
       const notifSettings = NotificationSettings();
       appendIfExists(wrapper, notifPrompt);
       appendIfExists(wrapper, notifSettings);
       if (notifSettings) notifSettings.setAttribute('data-destroy', '');
 
-      // 2. 공중 피아노 퀘스트
       const quest = AirPianoQuest();
       quest.setAttribute('data-destroy', '');
       wrapper.appendChild(quest);
 
-      // 3. 자세 체크
       wrapper.appendChild(
         PostureCheck({
           onComplete: () => {
@@ -133,23 +140,38 @@ export function App() {
     }
 
     // ── 연습 탭: TIMER 뷰 ──
-    const wrapper = document.createElement('div');
-    wrapper.className = 'kd-practice-wrapper';
+    if (practiceView === PRACTICE_VIEWS.TIMER) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'kd-practice-wrapper';
 
-    const timer = PracticeTimer({
-      onComplete: (duration) => {
-        recordSession({ duration: duration ?? 0 });
-        practiceView = PRACTICE_VIEWS.POSTURE;
-        switchTab(TABS.CALENDAR);
-      },
-    });
+      const timer = PracticeTimer({
+        onComplete: async (duration) => {
+          pendingDuration = duration ?? 0;
+          // 스트릭 업데이트 + IndexedDB 저장 — session ID 반환
+          pendingSessionId = await recordSession({ duration: pendingDuration });
+          practiceView = PRACTICE_VIEWS.NOTES;
+          renderMain();
+        },
+      });
 
-    const metro = Metronome();
-    metro.setAttribute('data-destroy', '');
+      const metro = Metronome();
+      metro.setAttribute('data-destroy', '');
 
-    wrapper.appendChild(timer);
-    wrapper.appendChild(metro);
-    main.appendChild(wrapper);
+      wrapper.appendChild(timer);
+      wrapper.appendChild(metro);
+      main.appendChild(wrapper);
+      return;
+    }
+
+    // ── 연습 탭: NOTES 뷰 ──
+    main.appendChild(
+      PracticeNotes({
+        sessionId: pendingSessionId,
+        duration:  pendingDuration,
+        onSave:    goToCalendar,
+        onSkip:    goToCalendar,
+      }),
+    );
   }
 
   // ToastContainer: 뷰 전환과 무관하게 앱 루트에 고정
@@ -157,9 +179,7 @@ export function App() {
   toast.setAttribute('data-destroy', '');
   el.appendChild(toast);
 
-  // 앱 로드 시 오늘의 알림 발송 여부 체크
   checkAndFireReminder();
-
   renderMain();
   return el;
 }

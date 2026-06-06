@@ -42,16 +42,18 @@ export function subscribe(fn) {
 
 /**
  * 오늘 연습 세션을 기록하고, 배지 조건을 검사한다.
+ * IndexedDB에 저장된 세션 ID를 반환한다 (노트 작성에 사용).
  * @param {{ duration?: number }} opts
+ * @returns {Promise<string | null>} session ID
  */
-export function recordSession({ duration = 0 } = {}) {
+export async function recordSession({ duration = 0 } = {}) {
   const date = today();
 
   if (practicedDates.has(date)) {
     streakData.totalDuration += duration;
     save(STREAK_KEY, streakData);
     notify();
-    return;
+    return null;
   }
 
   practicedDates.add(date);
@@ -78,20 +80,7 @@ export function recordSession({ duration = 0 } = {}) {
   saveNow(DATES_KEY, [...practicedDates]);
   notify();
 
-  // IndexedDB에 전체 세션 기록 저장 (비동기, UI 흐름을 막지 않음)
-  const endedAt = Date.now();
-  addSession({
-    date,
-    startedAt: endedAt - duration * 1000,
-    endedAt,
-    duration,
-    phases: [],
-    repertoire: null,
-    note: null,
-    questCompleted: false,
-  }).catch((err) => console.error('[streak] IndexedDB 세션 저장 실패:', err));
-
-  // 배지 알림은 저장 완료 후 표시 (약간 지연해 캘린더 전환 애니메이션과 겹치지 않게)
+  // 배지 알림 (노트 화면으로 전환 후 표시)
   newBadges.forEach((badge, i) => {
     setTimeout(
       () => {
@@ -105,6 +94,24 @@ export function recordSession({ duration = 0 } = {}) {
       800 + i * 600,
     );
   });
+
+  // IndexedDB 저장 — 노트 연결을 위해 session ID 반환
+  const endedAt = Date.now();
+  const result = await addSession({
+    date,
+    startedAt: endedAt - duration * 1000,
+    endedAt,
+    duration,
+    phases: [],
+    repertoire: null,
+    note: null,
+    questCompleted: false,
+  }).catch((err) => {
+    console.error('[streak] IndexedDB 세션 저장 실패:', err);
+    return { success: false, id: null };
+  });
+
+  return result?.id ?? null;
 }
 
 /**

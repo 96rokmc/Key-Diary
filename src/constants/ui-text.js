@@ -17,4 +17,15 @@ export const UI_TEXT = {
 
   STREAK_DAYS: (n) => `${n}일 연속`,
   TOTAL_HOURS: (h) => `누적 ${h}시간`,
+
+  NOTES_TITLE: '오늘 연습 돌아보기',
+  NOTES_RATING_LABEL: '오늘 연습은 어땠나요?',
+  NOTES_WELL_DONE_LABEL: '잘 된 점',
+  NOTES_WELL_DONE_PLACEHOLDER: '오늘 잘 된 것을 한 줄로 적어보세요',
+  NOTES_TOMORROW_LABEL: '내일 집중할 것',
+  NOTES_TOMORROW_PLACEHOLDER: '내일은 이것을 집중해서 연습하자',
+  NOTES_SAVE: '저장하기',
+  NOTES_SKIP: '건너뛰기',
+  NOTES_SAVED_TITLE: '연습 기록 저장!',
+  NOTES_SAVED_MESSAGE: '오늘의 노트가 저장됐습니다.',
 };
