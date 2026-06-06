@@ -27,9 +27,8 @@ jobs:
 
       - run: npm ci
 
-      # VITE_BASE는 GitHub Pages 프로젝트 사이트 URL 경로
-      # 예: 레포 이름이 "keys-diary" 이면 /keys-diary/
-      # 커스텀 도메인(CNAME)을 쓰는 경우 이 변수를 제거하거나 /로 설정
+      # Netlify(커스텀 도메인)를 사용하는 경우 VITE_BASE 불필요 — netlify.toml이 처리
+      # GitHub Pages 서브경로 배포 시에만 아래 env 필요
       - run: npm run build
         env:
           VITE_BASE: /${{ github.event.repository.name }}/
