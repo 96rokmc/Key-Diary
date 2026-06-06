@@ -6,6 +6,7 @@ import { Metronome } from './components/metronome/Metronome.js';
 import { StreakCalendar } from './components/calendar/StreakCalendar.js';
 import { RepertoireList } from './components/repertoire/RepertoireList.js';
 import { SightReading } from './components/sight-reading/SightReading.js';
+import { PitchPuzzle } from './components/sight-reading/PitchPuzzle.js';
 import { AirPianoQuest } from './components/quest/AirPianoQuest.js';
 import {
   NotificationPrompt,
@@ -149,9 +150,18 @@ export function App() {
 
     // ── 훈련 탭 ──
     if (activeTab === TABS.TRAINING) {
-      const training = SightReading();
-      training.setAttribute('data-destroy', '');
-      main.appendChild(training);
+      const wrap = document.createElement('div');
+      wrap.className = 'kd-training-wrapper';
+      wrap.setAttribute('data-destroy', '');
+
+      wrap.appendChild(SightReading());
+
+      const divider = document.createElement('hr');
+      divider.className = 'kd-training-divider';
+      wrap.appendChild(divider);
+
+      wrap.appendChild(PitchPuzzle());
+      main.appendChild(wrap);
       return;
     }
 
