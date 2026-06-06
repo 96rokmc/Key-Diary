@@ -5,6 +5,7 @@ import { PracticeTimer } from './components/timer/PracticeTimer.js';
 import { Metronome } from './components/metronome/Metronome.js';
 import { StreakCalendar } from './components/calendar/StreakCalendar.js';
 import { RepertoireList } from './components/repertoire/RepertoireList.js';
+import { SightReading } from './components/sight-reading/SightReading.js';
 import { AirPianoQuest } from './components/quest/AirPianoQuest.js';
 import {
   NotificationPrompt,
@@ -16,9 +17,10 @@ import { ToastContainer } from './components/toast/Toast.js';
 import { checkAndFireReminder } from './services/notification.service.js';
 
 const TABS = /** @type {const} */ ({
-  PRACTICE:    'practice',
-  REPERTOIRE:  'repertoire',
-  CALENDAR:    'calendar',
+  PRACTICE:   'practice',
+  REPERTOIRE: 'repertoire',
+  TRAINING:   'training',
+  CALENDAR:   'calendar',
 });
 
 const PRACTICE_VIEWS = /** @type {const} */ ({
@@ -60,6 +62,16 @@ export function App() {
           <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.5"/>
         </svg>
         <span>레퍼토리</span>
+      </button>
+      <button class="kd-nav-btn" data-tab="training"
+              aria-label="훈련" aria-selected="false">
+        <svg class="kd-nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <line x1="8" y1="8" x2="16" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="8" y1="12" x2="13" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span>훈련</span>
       </button>
       <button class="kd-nav-btn" data-tab="calendar"
               aria-label="캘린더" aria-selected="false">
@@ -132,6 +144,14 @@ export function App() {
       const rep = RepertoireList();
       rep.setAttribute('data-destroy', '');
       main.appendChild(rep);
+      return;
+    }
+
+    // ── 훈련 탭 ──
+    if (activeTab === TABS.TRAINING) {
+      const training = SightReading();
+      training.setAttribute('data-destroy', '');
+      main.appendChild(training);
       return;
     }
 
