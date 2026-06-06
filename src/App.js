@@ -12,6 +12,7 @@ import { AiCoach } from './components/ai-coach/AiCoach.js';
 import { Recorder } from './components/recorder/Recorder.js';
 import { RecordingArchive } from './components/recorder/RecordingArchive.js';
 import { OvertrainingBanner } from './components/overtraining/OvertrainingBanner.js';
+import { CloudSync } from './components/sync/CloudSync.js';
 import { showToast } from './services/toast.service.js';
 import { BREAK_AFTER_MS } from './services/overtraining.service.js';
 import { AirPianoQuest } from './components/quest/AirPianoQuest.js';
@@ -164,6 +165,13 @@ export function App() {
 
       const archive = RecordingArchive();
       wrap.appendChild(archive);
+
+      const divider3 = document.createElement('hr');
+      divider3.className = 'kd-calendar-divider';
+      wrap.appendChild(divider3);
+
+      const cloudSync = CloudSync();
+      wrap.appendChild(cloudSync);
 
       main.appendChild(wrap);
       return;
