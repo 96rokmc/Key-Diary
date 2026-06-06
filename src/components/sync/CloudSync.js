@@ -2,6 +2,7 @@ import './sync.css';
 import { UI_TEXT } from '../../constants/ui-text.js';
 import {
   isConfigured,
+  getConfig,
   saveConfig,
   clearConfig,
   getLastSync,
@@ -54,9 +55,20 @@ export function CloudSync() {
         <button type="submit" class="cs-btn cs-btn--primary" id="cs-connect-btn">
           ${UI_TEXT.SYNC_CONNECT}
         </button>
+
+        <details class="cs-import">
+          <summary class="cs-import__summary">설정 코드로 가져오기</summary>
+          <div class="cs-import__body">
+            <textarea class="cs-input cs-import__textarea" id="cs-import-code"
+                      placeholder="다른 기기에서 복사한 코드를 붙여넣으세요"
+                      rows="3" autocomplete="off"></textarea>
+            <button class="cs-btn cs-btn--primary" type="button" id="cs-import-btn">가져오기</button>
+          </div>
+        </details>
       </form>
     `;
     el.querySelector('#cs-form')?.addEventListener('submit', handleConfig);
+    el.querySelector('#cs-import-btn')?.addEventListener('click', handleImport);
   }
 
   // ── 동기화 패널 ───────────────────────────────────────────
@@ -82,10 +94,22 @@ export function CloudSync() {
               id="cs-sync" ${syncing ? 'disabled' : ''}>
         ${syncing ? UI_TEXT.SYNC_ING : UI_TEXT.SYNC_NOW}
       </button>
+
+      <details class="cs-export">
+        <summary class="cs-export__summary">다른 기기에서 사용하기 →</summary>
+        <div class="cs-export__body">
+          <p class="cs-export__desc">아래 코드를 복사해 다른 브라우저의 "코드로 가져오기" 칸에 붙여넣으세요.</p>
+          <div class="cs-export__row">
+            <code class="cs-export__code" id="cs-export-code">${btoa(JSON.stringify(getConfig()))}</code>
+            <button class="cs-export__copy" type="button" id="cs-copy-btn">복사</button>
+          </div>
+        </div>
+      </details>
     `;
 
     el.querySelector('#cs-sync')?.addEventListener('click', handleSync);
     el.querySelector('#cs-disconnect')?.addEventListener('click', handleDisconnect);
+    el.querySelector('#cs-copy-btn')?.addEventListener('click', handleCopy);
   }
 
   // ── 이벤트 핸들러 ─────────────────────────────────────────
@@ -150,6 +174,53 @@ export function CloudSync() {
     clearConfig();
     configured = false;
     statusType = null;
+    render();
+  }
+
+  async function handleCopy() {
+    const code = el.querySelector('#cs-export-code')?.textContent ?? '';
+    const btn  = el.querySelector('#cs-copy-btn');
+    try {
+      await navigator.clipboard.writeText(code);
+      if (btn) { btn.textContent = '복사됨 ✓'; setTimeout(() => { btn.textContent = '복사'; }, 2000); }
+    } catch {
+      if (btn) btn.textContent = '직접 선택해 복사하세요';
+    }
+  }
+
+  async function handleImport() {
+    const code = el.querySelector('#cs-import-code')?.value?.trim();
+    const btn  = el.querySelector('#cs-import-btn');
+    const wrap = el.querySelector('#cs-status-wrap');
+
+    if (!code) return;
+
+    let config;
+    try {
+      config = JSON.parse(atob(code));
+    } catch {
+      if (wrap) wrap.innerHTML = `<p class="cs-status cs-status--err">올바르지 않은 코드입니다.</p>`;
+      return;
+    }
+
+    if (!config?.url || !config?.anonKey) {
+      if (wrap) wrap.innerHTML = `<p class="cs-status cs-status--err">코드에 URL 또는 키가 없습니다.</p>`;
+      return;
+    }
+
+    if (btn) { btn.disabled = true; btn.textContent = '연결 중…'; }
+
+    saveConfig(config);
+    const test = await testConnection();
+
+    if (!test.success) {
+      clearConfig();
+      if (wrap) wrap.innerHTML = `<p class="cs-status cs-status--err">${UI_TEXT.SYNC_CONNECT_FAIL(test.error)}</p>`;
+      if (btn) { btn.disabled = false; btn.textContent = '가져오기'; }
+      return;
+    }
+
+    configured = true;
     render();
   }
 

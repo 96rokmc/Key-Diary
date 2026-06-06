@@ -127,3 +127,99 @@
 
 .cs-status--ok  { color: var(--color-sage); }
 .cs-status--err { color: var(--color-rust); }
+
+/* ── 내보내기 (연결된 상태) ── */
+.cs-export {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.cs-export__summary,
+.cs-import__summary {
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-serif);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  user-select: none;
+}
+
+.cs-export__summary::-webkit-details-marker,
+.cs-import__summary::-webkit-details-marker { display: none; }
+
+.cs-export__summary:hover,
+.cs-import__summary:hover { color: var(--color-ink); }
+
+.cs-export__body,
+.cs-import__body {
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-ivory);
+}
+
+.cs-export__desc {
+  font-family: var(--font-serif);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  line-height: var(--leading-normal);
+}
+
+.cs-export__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.cs-export__code {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-muted);
+  background: var(--color-cream);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  user-select: all;
+}
+
+.cs-export__copy {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-indigo);
+  color: var(--color-paper);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-serif);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: background var(--ease-default);
+  white-space: nowrap;
+}
+
+.cs-export__copy:hover { background: var(--color-indigo-2); }
+
+/* ── 가져오기 (설정 폼 내) ── */
+.cs-import {
+  border-top: 1px dashed var(--color-border-strong);
+  margin-top: var(--space-2);
+}
+
+.cs-import__body { padding-top: var(--space-3); border-top: none; background: transparent; }
+
+.cs-import__textarea {
+  resize: vertical;
+  min-height: 60px;
+  font-size: var(--text-xs);
+}
