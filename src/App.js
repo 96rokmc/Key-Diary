@@ -8,6 +8,7 @@ import { RepertoireList } from './components/repertoire/RepertoireList.js';
 import { SightReading } from './components/sight-reading/SightReading.js';
 import { PitchPuzzle } from './components/sight-reading/PitchPuzzle.js';
 import { GrowthCharts } from './components/charts/GrowthCharts.js';
+import { AnnualReport } from './components/charts/AnnualReport.js';
 import { AiCoach } from './components/ai-coach/AiCoach.js';
 import { Recorder } from './components/recorder/Recorder.js';
 import { RecordingArchive } from './components/recorder/RecordingArchive.js';
@@ -162,6 +163,13 @@ export function App() {
       const divider2 = document.createElement('hr');
       divider2.className = 'kd-calendar-divider';
       wrap.appendChild(divider2);
+
+      const annualReport = AnnualReport();
+      wrap.appendChild(annualReport);
+
+      const divider2b = document.createElement('hr');
+      divider2b.className = 'kd-calendar-divider';
+      wrap.appendChild(divider2b);
 
       const archive = RecordingArchive();
       wrap.appendChild(archive);
