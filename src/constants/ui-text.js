@@ -28,4 +28,18 @@ export const UI_TEXT = {
   NOTES_SKIP: '건너뛰기',
   NOTES_SAVED_TITLE: '연습 기록 저장!',
   NOTES_SAVED_MESSAGE: '오늘의 노트가 저장됐습니다.',
+
+  AI_COACH_TITLE: 'AI 연습 코치',
+  AI_COACH_SUBTITLE: '오늘의 연습을 돌아봅니다',
+  AI_COACH_KEY_DESC: 'Anthropic API 키를 입력하면 AI 코치의 피드백을 받을 수 있습니다. 키는 이 기기에만 저장됩니다.',
+  AI_COACH_KEY_PLACEHOLDER: 'sk-ant-...',
+  AI_COACH_KEY_SAVE: '저장',
+  AI_COACH_CTA_DESC: (mins) => `오늘 ${mins}분 연습 기록을 바탕으로\nAI 코치의 피드백을 받아보세요.`,
+  AI_COACH_GENERATE: 'AI 리뷰 받기',
+  AI_COACH_LOADING: '분석 중…',
+  AI_COACH_DONE: '캘린더 보기 →',
+  AI_COACH_SKIP: '건너뛰기',
+  AI_COACH_RETRY: '다시 시도',
+  AI_COACH_ERROR_PREFIX: '오류: ',
+  AI_COACH_ERROR_NO_KEY: 'API 키가 설정되지 않았습니다.',
 };

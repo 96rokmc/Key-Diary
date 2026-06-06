@@ -126,7 +126,7 @@ export function PracticeNotes({ sessionId, duration, onSave, onSkip }) {
       duration: 3000,
     });
 
-    onSave();
+    onSave(note);
   });
 
   // ── 건너뛰기 ───────────────────────────────────────────

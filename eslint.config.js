@@ -25,6 +25,7 @@ export default [
         MediaRecorder: 'readonly',
         Notification: 'readonly',
         ServiceWorkerRegistration: 'readonly',
+        fetch: 'readonly',
         setTimeout: 'readonly',
         clearTimeout: 'readonly',
         setInterval: 'readonly',

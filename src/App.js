@@ -8,6 +8,7 @@ import { RepertoireList } from './components/repertoire/RepertoireList.js';
 import { SightReading } from './components/sight-reading/SightReading.js';
 import { PitchPuzzle } from './components/sight-reading/PitchPuzzle.js';
 import { GrowthCharts } from './components/charts/GrowthCharts.js';
+import { AiCoach } from './components/ai-coach/AiCoach.js';
 import { AirPianoQuest } from './components/quest/AirPianoQuest.js';
 import {
   NotificationPrompt,
@@ -26,9 +27,10 @@ const TABS = /** @type {const} */ ({
 });
 
 const PRACTICE_VIEWS = /** @type {const} */ ({
-  POSTURE: 'posture',
-  TIMER:   'timer',
-  NOTES:   'notes',
+  POSTURE:   'posture',
+  TIMER:     'timer',
+  NOTES:     'notes',
+  AI_COACH:  'ai_coach',
 });
 
 export function App() {
@@ -36,6 +38,7 @@ export function App() {
   let practiceView     = PRACTICE_VIEWS.POSTURE;
   let pendingSessionId = null;
   let pendingDuration  = 0;
+  let pendingNote      = null;
 
   // ── DOM 뼈대 ─────────────────────────────────────────
   const el = document.createElement('div');
@@ -122,6 +125,7 @@ export function App() {
     practiceView     = PRACTICE_VIEWS.POSTURE;
     pendingSessionId = null;
     pendingDuration  = 0;
+    pendingNote      = null;
     switchTab(TABS.CALENDAR);
   }
 
@@ -229,13 +233,28 @@ export function App() {
       return;
     }
 
+    // ── 연습 탭: AI_COACH 뷰 ──
+    if (practiceView === PRACTICE_VIEWS.AI_COACH) {
+      main.appendChild(
+        AiCoach({
+          session:    { duration: pendingDuration, note: pendingNote },
+          onComplete: goToCalendar,
+        }),
+      );
+      return;
+    }
+
     // ── 연습 탭: NOTES 뷰 ──
     main.appendChild(
       PracticeNotes({
         sessionId: pendingSessionId,
         duration:  pendingDuration,
-        onSave:    goToCalendar,
-        onSkip:    goToCalendar,
+        onSave: (note) => {
+          pendingNote  = note;
+          practiceView = PRACTICE_VIEWS.AI_COACH;
+          renderMain();
+        },
+        onSkip: goToCalendar,
       }),
     );
   }
