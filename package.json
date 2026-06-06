@@ -28,6 +28,7 @@
   "author": "96rokmc@gmail.com",
   "license": "MIT",
   "dependencies": {
+    "chart.js": "^4.5.1",
     "idb": "^8.0.3",
     "vexflow": "^5.0.0"
   }

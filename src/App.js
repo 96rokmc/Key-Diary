@@ -7,6 +7,7 @@ import { StreakCalendar } from './components/calendar/StreakCalendar.js';
 import { RepertoireList } from './components/repertoire/RepertoireList.js';
 import { SightReading } from './components/sight-reading/SightReading.js';
 import { PitchPuzzle } from './components/sight-reading/PitchPuzzle.js';
+import { GrowthCharts } from './components/charts/GrowthCharts.js';
 import { AirPianoQuest } from './components/quest/AirPianoQuest.js';
 import {
   NotificationPrompt,
@@ -134,9 +135,21 @@ export function App() {
 
     // ── 캘린더 탭 ──
     if (activeTab === TABS.CALENDAR) {
+      const wrap = document.createElement('div');
+      wrap.setAttribute('data-destroy', '');
+
       const cal = StreakCalendar();
-      cal.setAttribute('data-destroy', '');
-      main.appendChild(cal);
+      wrap.appendChild(cal);
+
+      const divider = document.createElement('hr');
+      divider.className = 'kd-calendar-divider';
+      wrap.appendChild(divider);
+
+      const charts = GrowthCharts();
+      charts.setAttribute('data-destroy', '');
+      wrap.appendChild(charts);
+
+      main.appendChild(wrap);
       return;
     }
 
